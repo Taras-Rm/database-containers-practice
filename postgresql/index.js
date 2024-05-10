@@ -10,17 +10,23 @@ const user = process.env.POSTGRES_USER || "postgres";
 const database = process.env.POSTGRES_DB || "test";
 
 async function runner() {
-  try {
-    const client = new pg.Client({
-      host,
-      password,
-      user,
-      port,
-      database,
-    });
+  const client = new pg.Client({
+    host,
+    password,
+    user,
+    port,
+    database,
+  });
 
+  try {
     await client.connect();
     console.log("Connected to database!");
+
+    // drop 'users' table if exists
+    await client.query(`
+    DROP TABLE  IF EXISTS users;
+    `);
+    console.log("Table 'users' deleted!");
 
     // create 'users' table
     await client.query(`
@@ -29,6 +35,7 @@ async function runner() {
       name VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL
     );`);
+    console.log("Table 'users' created!");
 
     // insert data into 'users'
     await client.query(`
@@ -39,6 +46,7 @@ async function runner() {
       ('Alice', 'alice@test.com'),
       ('Martin', 'martin@test.com')
     ;`);
+    console.log("Data added to 'users' table!");
   } catch (error) {
     console.log(error);
   } finally {
