@@ -10,3 +10,4 @@ To run this project follow the next steps
 - ./postgres-cfg.env
 - ./pgadmin-cfg.env
 - ./mongo-cfg.env
+4. Run `docker compose up`
