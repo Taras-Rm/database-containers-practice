@@ -7,10 +7,20 @@ services:
       - 5432:5432
     env_file:
       - "./postgres-cfg.env"
+    volumes:
+      - ./postgresql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    
+  mongo-db:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    env_file:
+      - "./mongo-cfg.env"
+    volumes:
+      - ./mongodb/init_db.js:/docker-entrypoint-initdb.d/init_db.js
   
   pgadmin:
     image: dpage/pgadmin4
-    restart: always
     ports:
       - 8888:80
     env_file:
